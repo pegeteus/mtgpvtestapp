@@ -45,7 +45,6 @@ const Cardbox = ({card, rulings, rulingsAlert}) => {
   let showCardmarketLink = cardmarket != ""
   let showRulings = rulings.length > 0
   let legalities = card.legalities
-  console.log(rulings.map(x=>x), prices, uuidv4())
 
   return ( 
     <div align="left">
