@@ -19,6 +19,10 @@ const Cardbox = ({card}) => {
   let cardName = card.name
   let oracleText = card.oracle_text
   let cardImageUrl = card.image_uris
+  let prices = card.prices
+  let cardmarket = Object.entries(card.purchase_uris)
+                    .filter(uri => uri[0] == "cardmarket")
+                    .map(uri => uri[1])
   let legalities = card.legalities
 
   console.log(card, cardName, oracleText, cardImageUrl)
@@ -30,11 +34,19 @@ const Cardbox = ({card}) => {
       <div>
       <b>Name:</b> {cardName} <br />
       <b>Oracle text:</b> {oracleText} <br />
+      <h3>Prices:</h3>
+        <ul> {
+          Object.entries(prices)
+            .filter(price => price[0] == "eur" || price[0] == "eur_foil")
+            .map(price => <li key={price}>{price[0]} : {price[1]}&euro;</li>)
+        }</ul>
+      <b><a src={cardmarket}>Cardmarket link</a></b>
       <h3>Legality</h3>
         <ul> {
           Object.entries(legalities)
-            .map(format => <li key={format}>{format[0]} : {format[1]}</li>)
-        }</ul><br />      
+            .filter(legality => legality[1] == "legal")
+            .map(legality => <li key={legality}>{legality[0]} : {legality[1]}</li>)
+        }</ul>     
       </div>
     </div>
   )
@@ -47,6 +59,12 @@ const initCardValue = {
   "oracle_text" : "",
   "image_uris": {
     "small": ""
+  },
+  "prices": {
+    "" : ""
+  },
+  "purchase_uris": {
+    "" : ""
   },
   "legalities": {
     "" : ""
