@@ -37,10 +37,10 @@ const Cardbox = ({card}) => {
       <h3>Prices:</h3>
         <ul> {
           Object.entries(prices)
-            .filter(price => price[0] == "eur" || price[0] == "eur_foil")
+            .filter(price => price[0] == "eur" || price[0] == "eur_foil")           
             .map(price => <li key={price}>{price[0]} : {price[1]}&euro;</li>)
         }</ul>
-      <b><a src={cardmarket}>Cardmarket link</a></b>
+      <b><a href={cardmarket}>Cardmarket link</a></b>
       <h3>Legality</h3>
         <ul> {
           Object.entries(legalities)
