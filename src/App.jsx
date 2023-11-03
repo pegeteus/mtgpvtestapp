@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import axios from "axios"
 import './App.css'
 
@@ -40,7 +40,6 @@ const Cardbox = ({card}) => {
   )
 }
 
-const tooLongUrl = 'https://api.scryfall.com/cards/named?fuzzy=aust+com';
 const baseUrl = 'https://api.scryfall.com/cards/named?fuzzy='
 
 const initCardValue = { 
@@ -79,21 +78,8 @@ function App() {
         })
         .catch(error => {
           setSearchAlert("Card not found or ambiguous searh word(s).")
+          console.log(error)
         })
-  }
-  /*
-  useEffect(() => {
-    console.log('effect');
-    axios
-      .get(tooLongUrl)
-      .then(response => {
-        console.log('promise fulfilled');
-        setSearchedCard(response.data);
-      })
-  }, [])
-  */
-  if ({searchedCard} != []) {
-    console.log({searchedCard})
   }
 
   return (
