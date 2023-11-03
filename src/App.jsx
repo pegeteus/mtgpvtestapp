@@ -23,6 +23,7 @@ const Cardbox = ({card}) => {
   let cardmarket = Object.entries(card.purchase_uris)
                     .filter(uri => uri[0] == "cardmarket")
                     .map(uri => uri[1])
+  let showCardmarketLink = cardmarket != ""
   let legalities = card.legalities
 
   console.log(card, cardName, oracleText, cardImageUrl)
@@ -40,7 +41,7 @@ const Cardbox = ({card}) => {
             .filter(price => price[0] == "eur" || price[0] == "eur_foil")           
             .map(price => <li key={price}>{price[0]} : {price[1]}&euro;</li>)
         }</ul>
-      <b><a href={cardmarket}>Cardmarket link</a></b>
+      {showCardmarketLink ? <b><a href={cardmarket}>Cardmarket link</a></b> : null }
       <h3>Legality</h3>
         <ul> {
           Object.entries(legalities)
