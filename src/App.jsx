@@ -34,7 +34,7 @@ const SearchBox = ({searchText, onChange, onSubmit, searchAlert, autocomplete}) 
   )
 }
 
-const Cardbox = ({card, rulings, rulingsAlert}) => {
+const Cardbox = ({card, rulings, rulingsAlert, highlanderDecksUrl}) => {
   let cardName = card.name
   let oracleText = card.oracle_text
   let cardImageUrl = card.image_uris
@@ -47,29 +47,33 @@ const Cardbox = ({card, rulings, rulingsAlert}) => {
   let legalities = card.legalities
 
   return ( 
-    <div align="left">
+    <div align="left" fontSize="11px">
       <h2>Here is info's for found card</h2>
       <img src={cardImageUrl.small} ></img>
       <div>
       <b>Name:</b> {cardName} <br />
       <b>Oracle text:</b> {oracleText} <br />
-      <h3>Rulings:</h3>
+      <b>Rulings:</b>
       <div style={{ color: 'red' }}>{rulingsAlert}</div>
         { showRulings ?
           rulings.map(ruling => <li key={uuidv4()}><b>{ruling.source}</b> : {ruling.comment}</li>)
           : null
         }
-      <h3>Prices:</h3>
+      <b>Prices:</b>
         <ul>{
           Object.entries(prices)
             .filter(price => price[0] == "eur" || price[0] == "eur_foil")           
             .map(price => <li key={uuidv4()}>{price[0]} : {price[1]}&euro;</li>)
         }</ul>
-      { showCardmarketLink ? 
-        <b><a href={cardmarket}>Cardmarket link</a></b> 
-        : null 
-      }
-      <h3>Legality</h3>
+        { showCardmarketLink ? 
+          <div><b><a href={cardmarket}>Cardmarket link</a></b></div>
+          : null 
+        }
+        { showRulings ?
+          <div><b><a href={highlanderDecksUrl}>Highlander decks with this card at Moxfield</a></b></div>
+          : null
+        }
+      <b>Legality:</b>
         <ul> {
           Object.entries(legalities)
             .filter(legality => legality[1] == "legal")
@@ -80,6 +84,7 @@ const Cardbox = ({card, rulings, rulingsAlert}) => {
   )
 }
 
+const highlanderEuropean = "https://www.moxfield.com/decks/public?format=highlanderEuropean&filter="
 const baseUrl = 'https://api.scryfall.com/cards/named?fuzzy='
 const autocompBaseUrl = "https://api.scryfall.com/cards/autocomplete?q="
 const rulingsUrlStart = "https://api.scryfall.com/cards/"
@@ -112,6 +117,7 @@ function App() {
   const [searchedCard, setSearchedCard] = useState(initCardValue)
   const [cardAutocomp, setCardAutocomp] = useState(initAutocompValue)
   const [rulings, setRulings] = useState(initRulings)
+  const [highlanderDecksUrl, setHighlanderDecksUrl] = useState("")
   const [searchText, setSearchText] = useState("")
   const [searchAlert, setSearchAlert] = useState("")
   const [rulingsAlert, setRulingsAlert] = useState("")
@@ -131,6 +137,8 @@ function App() {
           console.log('promise fulfilled')
           const cardData = response.data
           setSearchedCard(cardData)
+          const higlanderDecksUrl = highlanderEuropean + cardData.name
+          setHighlanderDecksUrl(higlanderDecksUrl)
           setSearchAlert("")
 
           const rulingsUrl = rulingsUrlStart.concat(cardData.id).concat(rulingsUrlEnd)
@@ -174,7 +182,11 @@ function App() {
           onChange={handleTextChange} 
           onSubmit={handleCardSearch} 
           searchAlert={searchAlert}/>
-        <Cardbox card={searchedCard} rulings={rulings} rulingsAlert={rulingsAlert}/>
+        <Cardbox 
+          card={searchedCard} 
+          rulings={rulings} 
+          rulingsAlert={rulingsAlert} 
+          highlanderDecksUrl={highlanderDecksUrl}/>
       </div>
     </>
   )
